@@ -1,5 +1,12 @@
 Benchmarking and stress testing tool for the Zabbix server
 
+## Populate data
+
+Run `./generate-template-metrics.sh > template.xml` and upload template with metrics.
+Run `./generate-template-clients.sh > clients.xml` and upload template with clients.
+
+## Run benchmark
+
 ```bash
 Usage of zabbix-bench:
   -client int

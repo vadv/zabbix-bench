@@ -43,13 +43,14 @@ func main() {
 		go StartClient(i)
 	}
 
+	os.Stdout.WriteString(fmt.Sprintf("Start %d clients with packet size %d metric and delay between packets %v\n", *argClientCount, *argPacketSize, *argPacketDelay))
 	ticker := time.Tick(time.Second)
 	for {
 		select {
 		case <-ticker:
 			mutex.Lock()
+			os.Stdout.WriteString(fmt.Sprintf("progress %d s, %d metric/s\n", sec, counter))
 			sec += 1
-			os.Stdout.WriteString(fmt.Sprintf("Metric sended: %d\n", counter))
 			counter = 0
 			mutex.Unlock()
 		case count := <-completedChannel:
@@ -58,9 +59,13 @@ func main() {
 			total += count
 			mutex.Unlock()
 		case err := <-errorChannel:
-			os.Stderr.WriteString(fmt.Sprintf("Error write package:\t%s\n", err.Error()))
+			os.Stderr.WriteString(fmt.Sprintf("Error write metric:\t%s\n", err.Error()))
 		case <-signalChannel:
-			os.Stdout.WriteString(fmt.Sprintf("Total: %d (%d metric/s)\n", total, int(total/sec)))
+			speed := 0
+			if sec > 0 {
+				speed = int(total / sec)
+			}
+			os.Stdout.WriteString(fmt.Sprintf("\n-----------------------------\nTotal processed: %d (%d metric/s)\n", total, speed))
 			os.Exit(0)
 		}
 	}
@@ -79,7 +84,7 @@ func (c *client) send() error {
 	now := time.Now().Unix()
 	metrics := make([]*zabbix.Metric, 0)
 	for i := 0; i < *argPacketSize; i++ {
-		metrics = append(metrics, zabbix.NewMetric(c.host, fmt.Sprintf(*argMetricName, i), string(i), now))
+		metrics = append(metrics, zabbix.NewMetric(c.host, fmt.Sprintf(*argMetricName, i), fmt.Sprintf("%d", i), now))
 	}
 	return c.sender.Send(zabbix.NewPacket(metrics, now))
 }

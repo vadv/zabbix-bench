@@ -23,7 +23,7 @@ var (
 	argSendTimeout = flag.Duration("packet-send-timeout", 10*time.Millisecond, "packet send timeout")
 	argZabbix      = flag.String("zabbix", "127.0.0.1:10051", "address of zabbix server")
 	argMaxMetrics  = flag.Int("max-metrics", 0, "max number of metrics each client sends")
-	argMaxSeconds  = flag.Int("max-time", 0, "max duration of benchmark test in seconds")
+	argMaxDuration = flag.Duration("max-duration", 0, "max duration of benchmark test")
 
 	errorChannel     = make(chan error, 10)
 	completedChannel = make(chan int, 10)
@@ -69,7 +69,7 @@ func main() {
 			if *argMaxMetrics > 0 && total > *argMaxMetrics {
 				report_and_exit()
 			}
-			if *argMaxSeconds > 0 && sec > *argMaxSeconds {
+			if *argMaxDuration > 0 && time.Duration(sec)*time.Second > *argMaxDuration {
 				report_and_exit()
 			}
 			mutex.Unlock()

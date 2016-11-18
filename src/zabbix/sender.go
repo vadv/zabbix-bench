@@ -61,7 +61,7 @@ func (s *Sender) Send(packet *Packet) error {
 
 	_, err = s.read(conn)
 	if err != nil {
-		os.Stderr.WriteString(fmt.Sprintf("Read zabbix response error: %s\n", err.Error()))
+		fmt.Fprintf(os.Stderr, "Read zabbix response error: %s\n", err.Error())
 	}
 
 	return nil

@@ -3,7 +3,7 @@
 TEMPLATE_NAME="zabbix-bench"
 APPLICATION_NAME="zabbix-bench"
 METRIC_PREFIX="metric"
-METRICS=200
+METRICS=400
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <zabbix_export>

@@ -14,6 +14,7 @@ import (
 
 var (
 	argClientCount = flag.Int("client", 200, "number of concurrent clients")
+	argThreadCount = flag.Int("threads", runtime.NumCPU()*4, "number of threads")
 	argClinetName  = flag.String("client-format", "client-%d", "format of client name")
 	argPacketSize  = flag.Int("packet-size", 100, "count of metric in packet")
 	argMetricName  = flag.String("metric-format", "metric-%d", "format of metric name in packet")
@@ -31,7 +32,6 @@ var (
 
 func main() {
 
-	runtime.GOMAXPROCS(runtime.NumCPU() * 4)
 	signal.Notify(signalChannel, os.Interrupt)
 	signal.Notify(signalChannel, syscall.SIGTERM)
 
@@ -39,6 +39,7 @@ func main() {
 		flag.Parse()
 	}
 
+	runtime.GOMAXPROCS(*argThreadCount)
 	for i := 0; i < *argClientCount; i++ {
 		go StartClient(i)
 	}

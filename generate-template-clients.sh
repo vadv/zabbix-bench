@@ -3,7 +3,7 @@
 TEMPLATE_NAME="zabbix-bench"
 GROUP_NAME="Linux servers"
 CLIENT_PREFIX="client"
-CLIENTS=40000
+CLIENTS=2000
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <zabbix_export>

@@ -14,13 +14,12 @@ import (
 )
 
 var (
-	argClientCount = flag.Int("client", 200, "number of concurrent clients")
+	argClientCount = flag.Int("client", 2000, "number of concurrent clients")
 	argThreadCount = flag.Int("threads", runtime.NumCPU()*4, "number of threads")
 	argClinetName  = flag.String("client-format", "client-%d", "format of client name")
 	argPacketSize  = flag.Int("packet-size", 400, "count of metric in packet")
 	argMetricName  = flag.String("metric-format", "metric-%d", "format of metric name in packet")
-	argPacketDelay = flag.Duration("packet-delay", 100*time.Millisecond, "delay of send packet")
-	argSendTimeout = flag.Duration("packet-send-timeout", 10*time.Millisecond, "packet send timeout")
+	argPacketDelay = flag.Duration("packet-delay", 60*time.Second, "delay of send packet")
 	argZabbix      = flag.String("zabbix", "127.0.0.1:10051", "address of zabbix server")
 	argMaxMetrics  = flag.Int("max-metrics", 0, "max number of metrics each client sends")
 	argMaxDuration = flag.Duration("max-duration", 0, "max duration of benchmark test")
